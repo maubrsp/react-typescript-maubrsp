@@ -13,9 +13,11 @@ import * as AppActionCreators from '../actions/App.Actions';
 import { AppState } from '../state/AppState';
 import { connect } from 'react-redux';
 import { actions as JobsActionCreators } from '../data/jobs';
+import { actions as OpportunityActionCreators } from '../data/opportunity';
 import { actions as MaterialActionCreators } from '../data/material';
 import { getMaterialChartItems } from '../selectors';
 import HomePage from '../pages/Home';
+import JobPage from '../pages/job/JobContainer';
 
 interface IAppProps extends IApplicationProps {
   classes: any;
@@ -34,6 +36,7 @@ class MiniDrawer extends React.Component<IAppProps, IState> {
   };
 
   public componentWillMount() {
+    console.log('component wil mout in app bar', this.props);
     this.props.fetchJobs();
     this.props.fetchMaterials();
   }
@@ -62,6 +65,15 @@ class MiniDrawer extends React.Component<IAppProps, IState> {
       return <HomePage jobs={this.props.jobs} />;
     };
 
+    const JobPageContainer = (props: any): any => {
+      return (
+        <JobPage
+          fetchOpportunitys={this.props.fetchOpportunitys}
+          opportunity={this.props.opportunity}
+        />
+      );
+    };
+
     return (
       <div className={classes.root}>
         {this.renderAppBar()}
@@ -69,6 +81,7 @@ class MiniDrawer extends React.Component<IAppProps, IState> {
           <div className={classes.toolbar} />
           <Route path="/" exact={true} component={HomeContainer} />
           <Route path="/jobs" exact={true} component={HomeContainer} />
+          <Route path="/jobs/:id" exact={true} component={JobPageContainer} />
         </main>
       </div>
     );
@@ -83,7 +96,13 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchtoProps = (dispatch: Dispatch) =>
   bindActionCreators(
-    _.assign({}, AppActionCreators, JobsActionCreators, MaterialActionCreators),
+    _.assign(
+      {},
+      AppActionCreators,
+      JobsActionCreators,
+      MaterialActionCreators,
+      OpportunityActionCreators
+    ),
     dispatch
   );
 
