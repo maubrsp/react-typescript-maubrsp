@@ -36,7 +36,6 @@ class MiniDrawer extends React.Component<IAppProps, IState> {
   };
 
   public componentWillMount() {
-    console.log('component wil mout in app bar', this.props);
     this.props.fetchJobs();
     this.props.fetchMaterials();
   }
@@ -70,6 +69,7 @@ class MiniDrawer extends React.Component<IAppProps, IState> {
         <JobPage
           fetchOpportunitys={this.props.fetchOpportunitys}
           opportunity={this.props.opportunity}
+          location={this.props.location}
         />
       );
     };

@@ -13,12 +13,14 @@ import {
 
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import { Link } from 'react-router-dom';
 
 interface IDashboardProps {
   jobs: any;
   classes?: any;
   theme?: any;
   children?: any;
+  context?: any;
 }
 
 interface IPageState {
@@ -31,12 +33,21 @@ class HomePage extends React.Component<IDashboardProps, IPageState> {
     usersTablePage: 0,
     usersTableRowsPerPage: 5
   };
-
   public render(): JSX.Element {
     const { classes, jobs } = this.props;
     if (jobs.items.length === 0) {
       return null;
     }
+
+    const LinkOpportunity = uiProps => {
+      return (
+        <Link
+          to={{ pathname: `/jobs/${uiProps['aria-valuetext']}` }}
+          {...uiProps}
+        />
+      );
+    };
+
     return (
       <div className={classes.root}>
         <Grid container={true} justify="space-between">
@@ -77,6 +88,8 @@ class HomePage extends React.Component<IDashboardProps, IPageState> {
                         variant="contained"
                         color="primary"
                         className={classes.buttonGo}
+                        aria-valuetext={element.id}
+                        component={LinkOpportunity}
                       >
                         Candidatar-se
                       </Button>
@@ -98,7 +111,8 @@ class HomePage extends React.Component<IDashboardProps, IPageState> {
 const styles = (theme: Theme) => ({
   root: {
     flexGrow: 1,
-    marginBottom: 24
+    marginBottom: 24,
+    padding: 22
   },
   cardContainer: {
     marginBottom: 20
@@ -133,7 +147,6 @@ const styles = (theme: Theme) => ({
     boxShadow:
       '0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12)'
   },
-  buttonGo: {},
   cardSubitle: {
     position: 'absolute',
     top: '57px',
